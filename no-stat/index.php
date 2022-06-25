@@ -18,54 +18,6 @@ function clear($inp)
     return $inp;
 }
 
-function isMobile()
-{
-    return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
-}
-
-
-function getIP()
-{
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-        $ip = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } else {
-        $ip = $_SERVER['REMOTE_ADDR'];
-    }
-    return $ip;
-}
-function getLoc()
-{
-
-    $client  = @$_SERVER['HTTP_CLIENT_IP'];
-    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
-    $remote  = $_SERVER['REMOTE_ADDR'];
-    $country  = "Unknown";
-
-    if (filter_var($client, FILTER_VALIDATE_IP)) {
-        $ip = $client;
-    } elseif (filter_var($forward, FILTER_VALIDATE_IP)) {
-        $ip = $forward;
-    } else {
-        $ip = $remote;
-    }
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "http://www.geoplugin.net/json.gp?ip=" . $ip);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    $ip_data_in = curl_exec($ch); // string
-    curl_close($ch);
-
-    $ip_data = json_decode($ip_data_in, true);
-    $ip_data = str_replace('&quot;', '"', $ip_data); // for PHP 5.2 see stackoverflow.com/questions/3110487/
-
-    if ($ip_data && $ip_data['geoplugin_countryName'] != null) {
-        $country = $ip_data['geoplugin_countryName'];
-    }
-
-    return $country;
-}
 
 require_once('../config/config.php');
 
@@ -91,18 +43,8 @@ if ($result->num_rows > 0) {
 
 
     if ($dbkey == $key && $dbauth == $auth) {
-        if (isMobile()) {
-            $device = 'Phone';
-        } else {
-            $device = 'Desktop';
-        }
-        $ip = getIP();
-        $country = getLoc();
-        $cpu = cpu();
-        $memUsage = getServerMemoryUsage(false);
-        $ram = getNiceFileSize($memUsage["total"] - $memUsage["free"]);
         $time = (number_format(microtime(true) - $start_time, 2));
-        $sql = "INSERT INTO `data`(`ip`, `country`, `device`, `loadtime`, `servercpu`, `serverram`, `apiauth`) VALUES ('$ip','$country','$device','$time','0','0','$auth')";
+        $sql = "INSERT INTO `data`(`ip`, `country`, `device`, `loadtime`, `servercpu`, `serverram`, `apiauth`) VALUES ('0','0','0','$time','0','0','$auth')";
         $conn->query($sql);
         //$conn->query($sql3);
     } else {
