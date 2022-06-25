@@ -24,26 +24,6 @@ function isMobile()
 }
 
 
-function ram(){
-
-    $free = shell_exec('free');
-    $free = (string)trim($free);
-    $free_arr = explode("\n", $free);
-    $mem = explode(" ", $free_arr[1]);
-    $mem = array_filter($mem);
-    $mem = array_merge($mem);
-    $memory_usage = $mem[2]/$mem[1]*100;
-
-    return $memory_usage;
-}
-
-function cpu(){
-
-    $load = sys_getloadavg();
-    return $load[0];
-
-}
-
 function getIP()
 {
 
@@ -101,8 +81,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$key = clear($_GET['hsdf73jsd9h2']);
-$auth = clear($_GET['83ndfsfui38s']);
+$key = clear($_GET['key']);
+$auth = clear($_GET['auth']);
 
 $sql = "SELECT * FROM Users WHERE apikey = '$key'";
 $result = $conn->query($sql);
@@ -124,10 +104,11 @@ if ($result->num_rows > 0) {
         }
         $ip = $_SERVER['REMOTE_ADDR'];
         $country = getIP();
-        $cpu= cpu();
-        $ram = ram();
+        $cpu = cpu();
+        $memUsage = getServerMemoryUsage(false);
+        $ram = getNiceFileSize($memUsage["total"] - $memUsage["free"]);
         $time = (number_format(microtime(true) - $start_time, 2));
-        $sql = "INSERT INTO `Data`(`ip`, `country`, `device`, `loadtime`, `servercpu`, `serverram`, `apiauth`) VALUES ('$ip','$country','$device','$time','$cpu','$ram','$auth')";
+        $sql = "INSERT INTO `Data`(`ip`, `country`, `device`, `loadtime`, `servercpu`, `serverram`, `apiauth`) VALUES ('$ip','$country','$device','$time','0','0','$auth')";
         $conn->query($sql);
         //$conn->query($sql3);
     } else {

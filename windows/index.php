@@ -198,8 +198,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$key = clear($_GET['hsdf73jsd9h2']);
-$auth = clear($_GET['83ndfsfui38s']);
+$key = clear($_GET['key']);
+$auth = clear($_GET['auth']);
 
 $sql = "SELECT * FROM Users WHERE apikey = '$key'";
 $result = $conn->query($sql);
@@ -225,7 +225,7 @@ if ($result->num_rows > 0) {
         $memUsage = getServerMemoryUsage(false);
         $ram = getNiceFileSize($memUsage["total"] - $memUsage["free"]);
         $time = (number_format(microtime(true) - $start_time, 2));
-        $sql = "INSERT INTO `$auth`(`ip`, `country`, `device`, `loadtime`, `servercpu`, `serverram`) VALUES ('$ip','$country','$device','$time','$cpu','$ram')";
+        $sql = "INSERT INTO `Data`(`ip`, `country`, `device`, `loadtime`, `servercpu`, `serverram`, `apiauth`) VALUES ('$ip','$country','$device','$time','$cpu','$ram','$auth')";
         $conn->query($sql);
         //$conn->query($sql3);
     } else {
