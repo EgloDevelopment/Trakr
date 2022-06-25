@@ -26,6 +26,17 @@ function isMobile()
 
 function getIP()
 {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+function getLoc()
+{
 
     $client  = @$_SERVER['HTTP_CLIENT_IP'];
     $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -53,7 +64,7 @@ function getIP()
         $country = $ip_data['geoplugin_countryName'];
     }
 
-    return 'Country: ' . $country;
+    return $country;
 }
 
 require_once('../config/config.php');
@@ -85,8 +96,8 @@ if ($result->num_rows > 0) {
         } else {
             $device = 'Desktop';
         }
-        $ip = $_SERVER['REMOTE_ADDR'];
-        $country = getIP();
+        $ip = getIP();
+        $country = getLoc();
         $cpu = cpu();
         $memUsage = getServerMemoryUsage(false);
         $ram = getNiceFileSize($memUsage["total"] - $memUsage["free"]);
