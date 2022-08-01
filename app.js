@@ -6,7 +6,8 @@ var url = require('url');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 const { lookup } = require('geoip-lite');
-// MySQL connection information, don't touch pls
+
+// MySQL connection information
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -129,7 +130,6 @@ app.get("/trakr", function(req, res) {
     console.log("1 new visitor with id of: " + visitorid);
     // Sending success to users browser
     res.status(201);
-    res.send('Success');
     //Ending
     res.end;
     }); 
