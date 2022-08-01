@@ -1,0 +1,31 @@
+{
+  "name": "trakr",
+  "version": "1.0.0",
+  "description": "[![CodeFactor](https://www.codefactor.io/repository/github/eglodevelopment/trakr/badge)](https://www.codefactor.io/repository/github/eglodevelopment/trakr)",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EgloDevelopment/Trakr.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EgloDevelopment/Trakr/issues"
+  },
+  "homepage": "https://github.com/EgloDevelopment/Trakr#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "geoip-lite": "^1.4.5",
+    "http": "^0.0.1-security",
+    "js-user-country": "^1.0.1",
+    "lookup": "^0.1.0",
+    "mysql": "^2.18.1",
+    "request-ip": "^3.3.0",
+    "url": "^0.11.0"
+  }
+}
